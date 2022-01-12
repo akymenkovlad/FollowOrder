@@ -17,11 +17,12 @@ class GameViewController: UIViewController {
         if let level = defaults.object(forKey: "Level") as? Int {
             print("level \(level)")
         }
-        else{
+        else {
             defaults.set(1, forKey: "Level")
         }
         showScene()
     }
+    
     override var shouldAutorotate: Bool {
         return false
     }
@@ -33,19 +34,18 @@ class GameViewController: UIViewController {
             return .all
         }
     }
+    
     override var prefersStatusBarHidden: Bool {
         return true
     }
-    private func showScene(){
+    private func showScene() {
         if let view = self.view as! SKView? {
-            // Load the SKScene from 'GameScene.sks'
-            if let scene = SKScene(fileNamed: "GameScene") {
-                // Set the scale mode to scale to fit the window
-                scene.scaleMode = .aspectFill
-                scene.delegate = self as TransitionDelegate
-                // Present the scene
-                view.presentScene(scene)
-            }
+            let scene = GameScene(size: view.frame.size)
+            let transition = SKTransition.fade(withDuration: 1.0)
+            scene.scaleMode = .aspectFill
+            scene.delegate = self as TransitionDelegate
+            view.presentScene(scene, transition: transition)
+            
             view.ignoresSiblingOrder = true
             
             view.showsFPS = true
@@ -54,7 +54,7 @@ class GameViewController: UIViewController {
     }
 }
 //MARK: RoundDelegate
-extension GameViewController: TransitionDelegate{
+extension GameViewController: TransitionDelegate {
     func goToGameScreen() {
         showScene()
     }

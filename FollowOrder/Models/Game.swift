@@ -21,13 +21,15 @@ class Game {
         elements = 2
         createPlaylist()
     }
+    
     init(level:Int) {
         elements = 1+level
         self.level = level
         createPlaylist()
     }
-    func createPlaylist(){
-        for _ in 0..<elements{
+    
+    func createPlaylist() {
+        for _ in 0..<elements {
             var randomNumber = Int(arc4random_uniform(UInt32(elements))+1)
             
             while (playlist.contains(randomNumber)){
@@ -35,16 +37,15 @@ class Game {
             }
             print(randomNumber)
             playlist.append(randomNumber)
-
         }
     }
 }
 
-struct Wish:Codable{
+struct Wish:Codable {
     var fortune:String?
 }
 
-enum Emoji: String,CaseIterable{
+enum Emoji: String,CaseIterable {
     case anger = "anger_emoji"
     case love = "love_emoji"
     case sad = "sad_emoji"

@@ -13,17 +13,39 @@ protocol TransitionDelegate: SKSceneDelegate {
     func goToGameScreen()
 }
 
+class gameItem: SKSpriteNode {
+    init() {
+        let texture = SKTexture(imageNamed: "cool_emoji")
+        super.init(texture: texture, color: .clear, size: CGSize(width: 75, height: 75))
+    }
+    init(with name:String,index: Int) {
+        let texture = SKTexture(imageNamed: name)
+        super.init(texture: texture, color: .clear, size: CGSize(width: 75, height: 75))
+        self.name = String(index+1)
+        self.userData = ["value":(index+1)]
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func pulse() {
+        self.run(.sequence([.scale(to: 1.5, duration: 0.3),
+                            .scale(to: 1, duration: 0.3)]))
+    }
+}
+
 class GameScene: SKScene {
     
     private var levelLabel: SKLabelNode!
-    private var gameItems = [SKSpriteNode]()
-    var deltaPoint = CGPoint(x: 0, y: 0)
+    private var gameItems = [gameItem]()
     
     private var game: Game?
     
     deinit {
         print("\n THE SCENE \((type(of: self))) WAS REMOVED FROM MEMORY (DEINIT) \n")
     }
+    
     override func didMove(to view: SKView) {
         isUserInteractionEnabled = false
         let currentLevel = UserDefaults.standard.integer(forKey: "Level")
@@ -31,12 +53,8 @@ class GameScene: SKScene {
         game = Game(level: currentLevel)
         if let game = game {
             for i in 0..<game.elements {
-                let index = Int(arc4random_uniform(UInt32(Emoji.allCases.count)))
-                let emojiName = Emoji.allCases[index].rawValue
-                let item = SKSpriteNode(imageNamed: emojiName)
-                item.name = String(i+1)
-                item.size = CGSize(width: 100, height: 100)
-                item.userData = ["value":(i+1)]
+                let emojiName = Emoji.allCases.randomElement()?.rawValue
+                let item = gameItem(with: emojiName!, index: i)
                 gameItems.append(item)
                 gameItems[i].position = CGPoint(x: self.frame.midX, y: self.frame.midY)
                 addChild(gameItems[i])
@@ -52,31 +70,31 @@ class GameScene: SKScene {
         self.addChild(levelLabel)
         
         for item in gameItems {
+            item.alpha = 0.0
             item.run(SKAction.fadeIn(withDuration: 1.0))
             moveToRandomPosition(item: item)
         }
-        DispatchQueue.main.asyncAfter(deadline: .now()+1.5, execute: { [weak self] in
-            guard let self = self else {return}
+        self.run(.wait(forDuration: 1.5), completion: { [weak self] in
+            guard let self = self else { return }
             self.showNextItem()
         })
-        
     }
- 
+    
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else {
             return
         }
         let touchLocation = touch.location(in: self)
         let touchedNode = self.atPoint(touchLocation)
-        if let name = touchedNode.name{
+        if let name = touchedNode.name {
             for item in gameItems {
                 if name == item.name {
-                    item.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
+                    item.pulse()
                     guard let game = game else{
                         print("game object is nil")
                         return
                     }
-                    if game.readyForUser{
+                    if game.readyForUser {
                         checkIfCorrect(item.userData!["value"] as! Int)
                     }
                 }
@@ -84,22 +102,20 @@ class GameScene: SKScene {
         }
     }
     
-    override func update(_ currentTime: TimeInterval) {
-    }
     //MARK: Game logic functions
-    private func showNextItem(){
-        guard let game = game else{
+    private func showNextItem() {
+        guard let game = game else {
             print("game object is nil")
             return
         }
-        if game.currentItem <= game.playlist.count-1{
+        if game.currentItem <= game.playlist.count-1 {
             let selectedItem = game.playlist[game.currentItem]
-            switch selectedItem{
+            switch selectedItem {
             case 1...game.elements:
                 print(selectedItem)
                 for item in gameItems {
                     if String(selectedItem) == item.name {
-                        item.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
+                        item.pulse()
                     }
                 }
                 break
@@ -107,39 +123,41 @@ class GameScene: SKScene {
                 break
             }
             game.currentItem += 1
-            DispatchQueue.main.asyncAfter(deadline: .now()+1, execute: {
+            self.run(.wait(forDuration: 1), completion: { [weak self] in
+                guard let self = self else { return }
                 self.showNextItem()
             })
-            
         }
-        else{
+        else {
             game.readyForUser = true
             isUserInteractionEnabled = true
-           // enableButtons(state: true)
         }
     }
     
-    func checkIfCorrect(_ button:Int){
+    func checkIfCorrect(_ button:Int) {
         print(button)
-        guard let game = game else{
+        guard let game = game else {
             print("game object is nil")
             return
         }
         if button == game.playlist[game.numberOfTaps] {
             if game.numberOfTaps == game.playlist.count-1 {
-                DispatchQueue.main.asyncAfter(deadline: .now()+0.5, execute: {
+                self.run(.wait(forDuration: 0.5), completion: { [weak self] in
+                    guard let self = self else { return }
                     guard let delegate = self.delegate else { return }
                     self.view?.presentScene(nil)
                     (delegate as! TransitionDelegate).goToResultScreen(isVictory: true)
+                    return
                 })
-                return
             }
             game.numberOfTaps += 1
-        }else{
-            DispatchQueue.main.asyncAfter(deadline: .now()+0.5, execute: {
+        } else {
+            self.run(.wait(forDuration: 0.5), completion: { [weak self] in
+                guard let self = self else { return }
                 guard let delegate = self.delegate else { return }
                 self.view?.presentScene(nil)
                 (delegate as! TransitionDelegate).goToResultScreen(isVictory: false)
+                return
             })
         }
     }
@@ -148,17 +166,16 @@ class GameScene: SKScene {
         print(self.frame.width)
         let itemWidth = item.size.width
         let itemHeigth = item.size.height
-        var itemY = random(min: self.frame.minY + itemHeigth+10, max: self.frame.maxY-120-(itemHeigth))
-        var itemX = random(min: self.frame.minX + itemWidth+10, max: self.frame.maxX-10-itemWidth)
+        var itemY = CGFloat.random(in: (self.frame.minY + itemHeigth+10)...(self.frame.maxY-120-itemHeigth))
+        var itemX = CGFloat.random(in: (self.frame.minX + itemWidth+10)...(self.frame.maxX-10-itemWidth))
         var check = true
         //Check if gameItems are collided
         while check {
             check = false
-            
-            itemY = random(min: self.frame.minY + itemHeigth+10, max: self.frame.maxY-120-(itemHeigth))
-            itemX = random(min: self.frame.minX + itemWidth+10, max: self.frame.maxX-10-itemWidth)
+            itemY = CGFloat.random(in: (self.frame.minY + itemHeigth+10)...(self.frame.maxY-120-itemHeigth))
+            itemX = CGFloat.random(in: (self.frame.minX + itemWidth+10)...(self.frame.maxX-10-itemWidth))
             for btn in gameItems {
-                if item.name != btn.name{
+                if item.name != btn.name {
                     if abs(itemX - btn.position.x) <= itemWidth, abs(itemY - btn.position.y) <= itemHeigth{
                         print("Emojis collide")
                         print(btn.position.x)
@@ -174,12 +191,4 @@ class GameScene: SKScene {
         item.position.x = itemX
         print("Button \(String(describing: item.name)) cordinates x:\(item.position.x) y:\(item.position.y)")
     }
-    func random() -> CGFloat {
-        return CGFloat(Float(arc4random()) / 0xFFFFFFFF)
-    }
-    
-    func random(min: CGFloat, max: CGFloat) -> CGFloat {
-        return random() * (max - min) + min
-    }
-    
 }

@@ -9,10 +9,6 @@ import UIKit
 
 class StartViewController: UIViewController {
     
-    @IBOutlet weak var logoImageView: UIImageView!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var startButton: UIButton!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -24,5 +20,4 @@ class StartViewController: UIViewController {
         print("go to game screen")
         self.present(vc, animated: true)
     }
-
 }

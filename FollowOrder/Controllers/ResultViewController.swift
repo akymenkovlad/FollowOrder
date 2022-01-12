@@ -6,9 +6,7 @@
 //
 
 import UIKit
-import Alamofire
 import SpriteKit
-import JGProgressHUD
 
 
 class ResultViewController: UIViewController {
@@ -16,24 +14,35 @@ class ResultViewController: UIViewController {
     @IBOutlet weak var messageTextView: UITextView!
     @IBOutlet weak var playAgainButton: UIButton!
     @IBOutlet weak var resultLabel: UILabel!
+    
     //MARK: UI elements
     var isVictory = false
     weak var delegate: TransitionDelegate?
     
     private let skView = SKView()
-    private let spinner = JGProgressHUD(style: .dark)
+    private let spinner: UIActivityIndicatorView = {
+        let loginSpinner = UIActivityIndicatorView(style: .medium)
+        loginSpinner.translatesAutoresizingMaskIntoConstraints = false
+        loginSpinner.hidesWhenStopped = true
+        return loginSpinner
+    }()
 
     //MARK: View controller lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        spinner.show(in: view)
+        
+        view.addSubview(spinner)
+        spinner.startAnimating()
+        spinner.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
+        spinner.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor).isActive = true
+        
         configureUI()
-        if isVictory{
+        if isVictory {
             fetchWish()
         }
-        else{
-            spinner.dismiss(animated: true)
+        else {
+            spinner.stopAnimating()
             messageTextView.text = "Oooops"
             resultLabel.text = "Lose"
             messageTextView.isHidden = false
@@ -48,7 +57,8 @@ class ResultViewController: UIViewController {
             defaults.set(currentLvl+1, forKey: "Level")
         }
     }
-    private func configureUI(){
+    
+    private func configureUI() {
         skView.frame = view.bounds
         skView.backgroundColor = .clear
         playAgainButton.backgroundColor = .systemYellow
@@ -59,36 +69,41 @@ class ResultViewController: UIViewController {
         playAgainButton.isHidden = true
         resultLabel.isHidden = true
     }
-    @objc func startNewRound(){
-        
-    }
+    
     @IBAction func playAgainButtonPressed(_ sender: Any) {
         dismiss(animated: true, completion: nil)
         delegate?.goToGameScreen()
     }
+    
     //MARK: Victory case functions
-    private func fetchWish(){
-        AF.request("http://yerkee.com/api/fortune")
-            .validate()
-            .responseDecodable(of: Wish.self) { [weak self] response in
-                guard let self = self else{return}
-                self.spinner.dismiss(animated: true)
-                self.resultLabel.text = "Victory"
-                guard let wish = response.value else {
-                    self.messageTextView.text = "You won!!!"
-                    self.showWinAnimation()
-                    return
-                }
-                print(wish.fortune!)
+    private func fetchWish() {
+        guard let url = URL(string: "http://yerkee.com/api/fortune") else { fatalError("Invalid URL") }
+
+        // Create the network manager
+        let networkManager = NetworkManager()
+
+        // Request data from the backend
+        networkManager.request(fromURL: url) { [weak self] (result: Result<Wish, Error>) in
+            guard let self = self else{return}
+            switch result {
+            case .success(let wish):
+                debugPrint("We got a successful wish result: \(wish).")
                 self.messageTextView.text = wish.fortune
-                self.playAgainButton.isHidden = false
-                self.messageTextView.isHidden = false
-                self.resultLabel.isHidden = false
-                self.showWinAnimation()
+            case .failure(let error):
+                debugPrint("We got a failure trying to get the data. The error we got was: \(error.localizedDescription)")
+                self.messageTextView.text = "You won!!!"
             }
+            self.spinner.stopAnimating()
+            self.resultLabel.text = "Victory"
+            self.playAgainButton.isHidden = false
+            self.messageTextView.isHidden = false
+            self.resultLabel.isHidden = false
+            self.showWinAnimation()
+         }
     }
-    private func showWinAnimation(){
-        if isVictory{
+    
+    private func showWinAnimation() {
+        if isVictory {
             view.addSubview(skView)
             let scene: SKScene = SKScene(size: view.bounds.size)
             scene.scaleMode = .aspectFit

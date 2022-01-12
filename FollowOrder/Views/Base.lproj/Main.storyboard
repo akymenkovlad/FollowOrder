@@ -56,11 +56,6 @@
                             <constraint firstItem="BiR-2e-fyQ" firstAttribute="centerX" secondItem="3se-qz-xqx" secondAttribute="centerX" id="w3h-DF-cpX"/>
                         </constraints>
                     </view>
-                    <connections>
-                        <outlet property="logoImageView" destination="B22-dQ-dyR" id="fEN-Uq-oDP"/>
-                        <outlet property="startButton" destination="4DI-ow-GGq" id="PYi-Zx-cXy"/>
-                        <outlet property="titleLabel" destination="BiR-2e-fyQ" id="7XO-jF-kNb"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
@@ -95,7 +90,7 @@
                                 <color key="textColor" red="1" green="0.68235294120000001" blue="0.070588235289999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" textAlignment="center" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wWr-kJ-L29">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="center" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wWr-kJ-L29">
                                 <rect key="frame" x="20" y="121.5" width="374" height="609.5"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <color key="textColor" systemColor="labelColor"/>

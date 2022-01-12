@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import SpriteKit
 
 extension UIView {
     public var viewWidth: CGFloat {
