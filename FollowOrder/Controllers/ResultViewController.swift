@@ -20,7 +20,7 @@ class ResultViewController: UIViewController {
     weak var delegate: TransitionDelegate?
     
     private let skView = SKView()
-    private let spinner: UIActivityIndicatorView = {
+    private lazy var spinner: UIActivityIndicatorView = {
         let loginSpinner = UIActivityIndicatorView(style: .medium)
         loginSpinner.translatesAutoresizingMaskIntoConstraints = false
         loginSpinner.hidesWhenStopped = true
@@ -31,18 +31,14 @@ class ResultViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        
-        view.addSubview(spinner)
-        spinner.startAnimating()
-        spinner.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
-        spinner.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor).isActive = true
-        
         configureUI()
         if isVictory {
+            view.addSubview(spinner)
+            spinner.startAnimating()
+            spinner.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
+            spinner.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor).isActive = true
             fetchWish()
-        }
-        else {
-            spinner.stopAnimating()
+        } else {
             messageTextView.text = "Oooops"
             resultLabel.text = "Lose"
             messageTextView.isHidden = false
@@ -108,15 +104,13 @@ class ResultViewController: UIViewController {
             let scene: SKScene = SKScene(size: view.bounds.size)
             scene.scaleMode = .aspectFit
             scene.backgroundColor = .clear
-            let en = SKEmitterNode(fileNamed: "VictoryParticle.sks")
-            let en1 = SKEmitterNode(fileNamed: "VictoryParticle.sks")
-            let en2 = SKEmitterNode(fileNamed: "VictoryParticle.sks")
-            en?.position = CGPoint(x: 0, y: view.viewHeight)
-            scene.addChild(en!)
-            en1?.position = CGPoint(x: view.viewWidth, y: view.viewHeight)
-            scene.addChild(en1!)
-            en2?.position = CGPoint(x: view.viewWidth/2, y: view.viewHeight/2)
-            scene.addChild(en2!)
+            let emitterNodes = Array(repeating: SKEmitterNode(fileNamed: "VictoryParticle.sks")!, count: 3 )
+            emitterNodes[0].position = CGPoint(x: 0, y: view.viewHeight)
+            emitterNodes[1].position = CGPoint(x: view.viewWidth, y: view.viewHeight)
+            emitterNodes[2].position = CGPoint(x: view.viewWidth/2, y: view.viewHeight/2)
+            for node in emitterNodes {
+                scene.addChild(node)
+            }
             skView.presentScene(scene)
             DispatchQueue.main.asyncAfter(deadline: .now()+2.0, execute: { [weak self] in
                 self?.skView.removeFromSuperview()

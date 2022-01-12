@@ -18,4 +18,11 @@ extension UIView {
         return self.frame.size.height
     }
 }
+extension Int{
+   static func isqrt(_ n: Int) -> Int {
+       var r = Int(Double(n).squareRoot()) // Initial approximation
+       if r * r < n { r+=1 }
+       return r
+    }
+}
 

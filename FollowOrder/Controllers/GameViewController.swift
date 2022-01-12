@@ -13,13 +13,7 @@ class GameViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let defaults = UserDefaults.standard
-        if let level = defaults.object(forKey: "Level") as? Int {
-            print("level \(level)")
-        }
-        else {
-            defaults.set(1, forKey: "Level")
-        }
+        UserDefaults.standard.register(defaults: ["Level": 1])
         showScene()
     }
     
@@ -38,6 +32,7 @@ class GameViewController: UIViewController {
     override var prefersStatusBarHidden: Bool {
         return true
     }
+    
     private func showScene() {
         if let view = self.view as! SKView? {
             let scene = GameScene(size: view.frame.size)
@@ -55,6 +50,7 @@ class GameViewController: UIViewController {
 }
 //MARK: RoundDelegate
 extension GameViewController: TransitionDelegate {
+    
     func goToGameScreen() {
         showScene()
     }
@@ -69,4 +65,5 @@ extension GameViewController: TransitionDelegate {
         print("go to result screen")
         self.present(vc, animated: true)
     }
+    
 }

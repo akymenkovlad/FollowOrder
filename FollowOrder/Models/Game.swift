@@ -8,12 +8,10 @@
 import Foundation
 
 class Game {
-    var level:Int
     
+    var level:Int
     var playlist = [Int]()
-    var currentItem = 0
     var numberOfTaps = 0
-    var readyForUser:Bool = false
     var elements:Int
     
     init() {
@@ -29,15 +27,8 @@ class Game {
     }
     
     func createPlaylist() {
-        for _ in 0..<elements {
-            var randomNumber = Int(arc4random_uniform(UInt32(elements))+1)
-            
-            while (playlist.contains(randomNumber)){
-                randomNumber = Int(arc4random_uniform(UInt32(elements))+1)
-            }
-            print(randomNumber)
-            playlist.append(randomNumber)
-        }
+        playlist = Array(0..<elements)
+        playlist.shuffle()
     }
 }
 
