@@ -9,7 +9,6 @@ import UIKit
 import Alamofire
 import SpriteKit
 import JGProgressHUD
-import RealmSwift
 
 
 class ResultViewController: UIViewController {
@@ -20,7 +19,6 @@ class ResultViewController: UIViewController {
     //MARK: UI elements
     var isVictory = false
     weak var delegate: TransitionDelegate?
-    let realm = try! Realm()
     
     private let skView = SKView()
     private let spinner = JGProgressHUD(style: .dark)
@@ -45,12 +43,9 @@ class ResultViewController: UIViewController {
     }
     override func viewDidAppear(_ animated: Bool) {
         if isVictory {
-            let level = realm.objects(Level.self)
-            if let level = level.first {
-                try! realm.write {
-                    level.level += 1
-                }
-            }
+            let defaults = UserDefaults.standard
+            let currentLvl = defaults.integer(forKey: "Level")
+            defaults.set(currentLvl+1, forKey: "Level")
         }
     }
     private func configureUI(){

@@ -7,7 +7,6 @@
 
 import SpriteKit
 import GameplayKit
-import RealmSwift
 
 protocol TransitionDelegate: SKSceneDelegate {
     func goToResultScreen(isVictory:Bool)
@@ -21,15 +20,13 @@ class GameScene: SKScene {
     var deltaPoint = CGPoint(x: 0, y: 0)
     
     private var game: Game?
-    let realm = try! Realm()
-    lazy var level: Results<Level> = { self.realm.objects(Level.self) }()
     
     deinit {
         print("\n THE SCENE \((type(of: self))) WAS REMOVED FROM MEMORY (DEINIT) \n")
     }
     override func didMove(to view: SKView) {
         isUserInteractionEnabled = false
-        let currentLevel = level[0].level
+        let currentLevel = UserDefaults.standard.integer(forKey: "Level")
         scene?.backgroundColor = .systemBackground
         game = Game(level: currentLevel)
         if let game = game {

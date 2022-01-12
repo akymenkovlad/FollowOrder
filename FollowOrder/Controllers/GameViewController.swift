@@ -8,20 +8,17 @@
 import UIKit
 import SpriteKit
 import GameplayKit
-import RealmSwift
 
 class GameViewController: UIViewController {
     
-    
-    let realm = try! Realm()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        let level = Level(level: 1)
-        try! self.realm.write {
-            if self.realm.objects(Level.self).isEmpty{
-                self.realm.add(level)
-            }
+        let defaults = UserDefaults.standard
+        if let level = defaults.object(forKey: "Level") as? Int {
+            print("level \(level)")
+        }
+        else{
+            defaults.set(1, forKey: "Level")
         }
         showScene()
     }

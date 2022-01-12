@@ -6,8 +6,6 @@
 //
 
 import Foundation
-import RealmSwift
-
 
 class Game {
     var level:Int
@@ -58,12 +56,4 @@ enum Emoji: String,CaseIterable{
     case hug = "hug_emoji"
     case cry = "cry_emoji"
     case angel = "angel_emoji"
-}
-class Level: Object {
-    @Persisted(primaryKey: true) var _id: ObjectId
-    @Persisted var level: Int = 0
-    convenience init(level: Int) {
-            self.init()
-            self.level = level
-        }
 }
