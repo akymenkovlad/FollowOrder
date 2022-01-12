@@ -104,13 +104,15 @@ class ResultViewController: UIViewController {
             let scene: SKScene = SKScene(size: view.bounds.size)
             scene.scaleMode = .aspectFit
             scene.backgroundColor = .clear
-            let emitterNodes = Array(repeating: SKEmitterNode(fileNamed: "VictoryParticle.sks")!, count: 3 )
-            emitterNodes[0].position = CGPoint(x: 0, y: view.viewHeight)
-            emitterNodes[1].position = CGPoint(x: view.viewWidth, y: view.viewHeight)
-            emitterNodes[2].position = CGPoint(x: view.viewWidth/2, y: view.viewHeight/2)
-            for node in emitterNodes {
-                scene.addChild(node)
-            }
+            let emitterNode1 = SKEmitterNode(fileNamed: "VictoryParticle.sks")!
+            let emitterNode2 = SKEmitterNode(fileNamed: "VictoryParticle.sks")!
+            let emitterNode3 = SKEmitterNode(fileNamed: "VictoryParticle.sks")!
+            emitterNode1.position = CGPoint(x: 0, y: view.viewHeight)
+            emitterNode2.position = CGPoint(x: view.viewWidth, y: view.viewHeight)
+            emitterNode3.position = CGPoint(x: view.viewWidth/2, y: view.viewHeight/2)
+            scene.addChild(emitterNode1)
+            scene.addChild(emitterNode2)
+            scene.addChild(emitterNode3)
             skView.presentScene(scene)
             DispatchQueue.main.asyncAfter(deadline: .now()+2.0, execute: { [weak self] in
                 self?.skView.removeFromSuperview()
