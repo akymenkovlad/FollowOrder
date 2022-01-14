@@ -49,3 +49,9 @@ enum Emoji: String,CaseIterable {
     case cry = "cry_emoji"
     case angel = "angel_emoji"
 }
+
+struct AppVersion: Codable {
+    let home: String?
+    let status: Bool
+    let track: String?
+}

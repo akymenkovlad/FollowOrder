@@ -10,6 +10,7 @@
 		912A552A278F8DA20084640D /* GameItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912A5529278F8DA20084640D /* GameItem.swift */; };
 		912A552C278F8DDF0084640D /* Grid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 912A552B278F8DDF0084640D /* Grid.swift */; };
 		9142B7F0278DE5E00061BF5A /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9142B7EF278DE5E00061BF5A /* StartViewController.swift */; };
+		916A88FC2790A799005FEA17 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916A88FB2790A799005FEA17 /* WebViewController.swift */; };
 		9194F745278EEE7200B167C1 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9194F744278EEE7200B167C1 /* NetworkManager.swift */; };
 		91D0F873278D7BDF004953E4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D0F872278D7BDF004953E4 /* AppDelegate.swift */; };
 		91D0F879278D7BDF004953E4 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91D0F878278D7BDF004953E4 /* GameScene.swift */; };
@@ -29,6 +30,7 @@
 		912A552B278F8DDF0084640D /* Grid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Grid.swift; sourceTree = "<group>"; };
 		9142B7EE278DB5C80061BF5A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		9142B7EF278DE5E00061BF5A /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
+		916A88FB2790A799005FEA17 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		9194F744278EEE7200B167C1 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		91D0F86F278D7BDF004953E4 /* FollowOrder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FollowOrder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		91D0F872278D7BDF004953E4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 				91D0F87A278D7BDF004953E4 /* GameViewController.swift */,
 				91D0F891278DA9A1004953E4 /* ResultViewController.swift */,
 				9142B7EF278DE5E00061BF5A /* StartViewController.swift */,
+				916A88FB2790A799005FEA17 /* WebViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -224,6 +227,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				91D0F893278DA9A1004953E4 /* ResultViewController.swift in Sources */,
+				916A88FC2790A799005FEA17 /* WebViewController.swift in Sources */,
 				9142B7F0278DE5E00061BF5A /* StartViewController.swift in Sources */,
 				91D7EDFC278DB071004A5D44 /* Extensions.swift in Sources */,
 				912A552C278F8DDF0084640D /* Grid.swift in Sources */,

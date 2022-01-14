@@ -134,6 +134,40 @@
             </objects>
             <point key="canvasLocation" x="1004" y="19"/>
         </scene>
+        <!--Web View Controller-->
+        <scene sceneID="7Wl-BD-5nh">
+            <objects>
+                <viewController storyboardIdentifier="WebViewController" id="lwo-1C-gET" customClass="WebViewController" customModule="FollowOrder" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="VX4-uq-3mj">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NOo-1v-w2u">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="uf5-f2-SNF"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="NOo-1v-w2u" firstAttribute="leading" secondItem="uf5-f2-SNF" secondAttribute="leading" id="0BO-kU-QOx"/>
+                            <constraint firstItem="uf5-f2-SNF" firstAttribute="bottom" secondItem="NOo-1v-w2u" secondAttribute="bottom" id="a3J-Ke-RH3"/>
+                            <constraint firstItem="uf5-f2-SNF" firstAttribute="trailing" secondItem="NOo-1v-w2u" secondAttribute="trailing" id="cVJ-Or-aRC"/>
+                            <constraint firstItem="NOo-1v-w2u" firstAttribute="top" secondItem="uf5-f2-SNF" secondAttribute="top" id="ysR-na-zy0"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="webView" destination="NOo-1v-w2u" id="fcK-JP-l6U"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="CN9-qj-Imu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1742" y="19"/>
+        </scene>
     </scenes>
     <resources>
         <image name="logo" width="1481" height="1536"/>
